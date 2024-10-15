@@ -1,0 +1,3 @@
+[submodule "custom_nodes/ComfyUI_InstantID"]
+	path = custom_nodes/ComfyUI_InstantID
+	url = https://github.com/cubiq/ComfyUI_InstantID.git
