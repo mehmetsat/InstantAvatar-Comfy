@@ -15,6 +15,18 @@ ComfyUI is chosen for several reasons:
 
 
 ### 🚀 Improvements and Optimizations
+Because it is forked from default Comfy repository, there are many files and folders unchanged, so please check only these files to see the changes:
+
+- download_models.sh 
+- instant_id_img2img.py
+- instant_id_api.py
+- instant_id_api_test.py
+- instant_id_final_program.py
+- instant_id_ui_dev.py
+- start_instant_avatar.py
+- prompts.py
+- template_images/
+
 This implementation includes several enhancements over the default InstantID:
 
 1. 🌈 **Noise Injection**: The default InstantID implementation can sometimes produce overly dark or "burned" images. By injecting noise to the negative embeds, this effect is mitigated, resulting in brighter images and improved facial likenesses. The Apply InstantID node automatically injects 35% noise to achieve this effect.
