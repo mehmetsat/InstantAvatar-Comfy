@@ -1,6 +1,13 @@
 # 🌟 InstantAvatar Setup Guide
 
 ## 🔍 Overview
+##  SHOWCASE
+
+<div style="display: flex; align-items: center;">
+    <img src="./template_images/face_photos/image (30).webp" alt="Template Image" style="margin-right: 20px;">
+    <img src="./outputimage.png" alt="Generated Image">
+</div>
+
 
 ### 🖥️ Gradio UI with ComfyUI Backend
 <span style="color: #4a90e2;">InstantAvatar utilizes a Gradio interface for its user interaction, while leveraging the ComfyUI backend for processing. This combination provides a user-friendly front-end with the powerful processing capabilities of ComfyUI.</span>
