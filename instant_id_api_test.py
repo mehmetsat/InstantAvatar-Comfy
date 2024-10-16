@@ -2,8 +2,10 @@ import requests
 from PIL import Image
 import io
 import random
+
+
 def test_generate_image():
-    url = "http://0.0.0.0:8000/generate-image/"
+    url = "http://localhost:8000/generate-image/"
     
     # Open test images
     with open("/home/mehmetsat-extra/personal/InstantAvatar-Comfy/template_images/face_photos/image (30).webp", "rb") as input_image_file, \
@@ -33,14 +35,46 @@ def test_generate_image():
         
         # Check the response
         if response.status_code == 200:
-            # Save the streaming response content to an image file
-            # Convert the response content to an image
-            image = Image.open(io.BytesIO(response.content))
-            image.save("outputimage.png")
-            print("Test passed: Image generated and saved successfully.")
+            # Get the image path from the response
+            image_path = response.json().get("image_path")
+            if image_path:
+                print(f"Test passed: Image generated and saved at {image_path}.")
+            else:
+                print("Test failed: No image path returned.")
+        else:
+            print(f"Test failed: {response.status_code} - {response.text}")
+
+def test_generate_image_full():
+    url = "http://localhost:8000/generate-image-final/"
+    
+    # Open test images
+    with open("/home/mehmetsat-extra/personal/InstantAvatar-Comfy/template_images/face_photos/image (30).webp", "rb") as input_image_file:
+        
+        # Prepare the files and data for the request
+        files = {
+            "input_image": input_image_file
+        }
+        seed = random.randint(1, 2**64)
+        print(seed)
+        data = {
+            "style" : "explorer",
+            "gender" : "female"
+        }
+        
+        # Send the POST request
+        response = requests.post(url, files=files, data=data, stream=True)
+        
+        # Check the response
+        if response.status_code == 200:
+            # Get the image path from the response
+            image_path = response.json().get("image_path")
+            if image_path:
+                print(f"Test passed: Image generated and saved at {image_path}.")
+            else:
+                print("Test failed: No image path returned.")
         else:
             print(f"Test failed: {response.status_code} - {response.text}")
 
 # Run the test function
 if __name__ == "__main__":
-    test_generate_image()
+    test_generate_image_full()

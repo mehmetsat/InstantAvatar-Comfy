@@ -243,6 +243,7 @@ def generate_image(
 
 # Initialize the ModelManager once
 model_manager = ModelManager()
+from prompts import prompt_dict, init_images, embeddings
 
 @app.post("/generate-image/")
 async def generate_image_endpoint(
@@ -282,16 +283,74 @@ async def generate_image_endpoint(
         model_manager=model_manager
     )
 
-    # Convert the output image to bytes
-    img_byte_arr = io.BytesIO()
-    output_image.save(img_byte_arr, format='PNG')
-    img_byte_arr.seek(0)
+    # Save the output image to a file
+    output_path = "output_image.png"
+    output_image.save(output_path, format='PNG')
+    print(f"Image saved to {output_path}")
 
-    return StreamingResponse(img_byte_arr, media_type="image/png")
+    return {"image_path": output_path}
+
+
+@app.post("/generate-image-final/")
+async def generate_image_full(
+    input_image: UploadFile = File(...),
+    style: str = Form(...),
+    gender: str = Form(...)
+):
+    
+    # get prompts from prompt_dict based on style and gender
+    prompts = prompt_dict[gender][style]["prompts"]
+    
+    # randomly select a prompt
+    prompt = random.choice(prompts)
+    print("Prompt: ", prompt)
+    
+    embedding = random.choice(embeddings)
+    
+    prompt = prompt + " " + embedding
+    
+    # randomly select an init image
+    init_image_path = random.choice(init_images)
+    print("Init image path: ", init_image_path)
+    # Read images from the uploaded files
+    input_image_data = await input_image.read()
+
+    negative_prompt = "embedding:ac_neg1 embedding:ac_neg2 out of frame, lowres, text, error, cropped, worst quality, low quality, jpeg artifacts, ugly, duplicate, morbid, mutilated, out of frame, extra fingers, mutated hands, poorly drawn hands, poorly drawn face, mutation, deformed, blurry, bad anatomy, bad proportions, extra limbs, cloned face, disfigured, gross proportions, malformed limbs, missing arms, missing legs, extra arms, extra legs, fused fingers, too many fingers, long neck, username, watermark, signature"
+    seed = random.randint(1, 2**64)
+    steps = 12
+    cfg_scale = 2.0
+    sampler_name = "ddpm"
+    scheduler = "karras"
+    # Convert image data to PIL Images
+    input_image_pil = Image.open(io.BytesIO(input_image_data))
+    pose_image_pil = Image.open(init_image_path)
+    init_image_pil = pose_image_pil.copy()
+
+    # Generate the image
+    output_image = generate_image(
+        input_image=input_image_pil,
+        pose_image=pose_image_pil,
+        init_image=init_image_pil,
+        positive_prompt=prompt,
+        negative_prompt=negative_prompt,
+        seed=seed,
+        steps=steps,
+        cfg_scale=cfg_scale,
+        sampler_name=sampler_name,
+        scheduler=scheduler,
+        model_manager=model_manager
+    )
+
+# Save the output image to a file
+    output_path = "output_image_final.jpeg"
+    output_image.save(output_path, format='JPEG')
+    print(f"Image saved to {output_path}")
+
+    return {"image_path": output_path}
 
 # To run the server, use: uvicorn fastapi_server:app --reload
 
 if __name__ == "__main__":
     import uvicorn
-    uvicorn.run(app, host="0.0.0.0", port=8000)
+    uvicorn.run(app, port=8000)
 
