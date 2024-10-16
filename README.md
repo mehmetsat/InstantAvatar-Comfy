@@ -4,8 +4,14 @@
 ##  SHOWCASE
 
 <div style="display: flex; align-items: center;">
-    <img src="./template_images/face_photos/image (30).webp" alt="Template Image" style="margin-right: 20px;">
-    <img src="./outputimage.png" alt="Generated Image">
+    <div style="flex: 1; text-align: center;">
+        <img src="./template_images/face_photos/image (30).webp" alt="Template Image" style="max-width: 100%;">
+        <p>Template Image</p>
+    </div>
+    <div style="flex: 1; text-align: center;">
+        <img src="./outputimage.png" alt="Generated Image" style="max-width: 100%;">
+        <p>Generated Image</p>
+    </div>
 </div>
 
 
