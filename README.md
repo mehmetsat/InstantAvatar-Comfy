@@ -20,7 +20,7 @@ This implementation includes several enhancements over the default InstantID:
 
 2. 🖼️ **Init Image Support**: To address the issue of low-quality image generation in ComfyUI's InstantID extension, support for an init image has been added. This init image guides the denoising process at 0.8-0.9 strength, resulting in higher quality output images.
 
-3. 🧠 **Model Integration**: The implementation uses high-quality open or closed models to generate input images, which then guide the SDXL model. This approach combines the strengths of multiple models to produce superior results.
+3. 🧠 **Model Integration**: The implementation uses high-quality open or closed models to generate template input images, which then guide the SDXL model. This approach combines the strengths of multiple models to produce superior results. The template images can be generated using Midjourney, Flux1.1 pro or other highend models once and then used as init image here.
 
 ### 🎓 Model Choice
 <span style="color: #ff6b6b;">For this demo, the realvis 3.0 turbo model is used. This model excels at generating realistic images and scenes. While it's an excellent choice for realistic outputs, it can be replaced with alternative models if different stylistic results are desired.</span>
